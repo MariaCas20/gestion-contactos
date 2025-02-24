@@ -3,7 +3,7 @@ package com.prueba.contactos.Servicio;
 import com.prueba.contactos.modelos.Contactos;
 import com.prueba.contactos.modelos.DtoRespuesta;
 import com.prueba.contactos.repositorio.RepositorioContacto;
-import jakarta.persistence.EntityNotFoundException;
+import com.prueba.contactos.utilidades.ExcepcionContactos;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
@@ -22,6 +22,7 @@ public class Servicio {
 
 
     public DtoRespuesta crearContacto(Contactos contacto) {
+        vaidarSiExiste(contacto.getNombre(), contacto.getApellido());
         repositorioContacto.save(contacto);
         DtoRespuesta respuesta = new DtoRespuesta("Contacto creado con éxito",
                 LocalDateTime.now().toString());
@@ -34,9 +35,6 @@ public class Servicio {
 
     public DtoRespuesta actualizarContacto(Contactos contacto) {
         Long id = obtenerIdPorNombreApellido(contacto.getNombre(), contacto.getApellido());
-        if (!repositorioContacto.existsById(id)) {
-            throw new RuntimeException();
-        }
         contacto.setId(id);
         repositorioContacto.save(contacto);
         DtoRespuesta respuesta = new DtoRespuesta("Contacto actualizado con éxito",
@@ -46,9 +44,6 @@ public class Servicio {
 
     public DtoRespuesta eliminarContacto(Contactos contacto) {
         Long id = obtenerIdPorNombreApellido(contacto.getNombre(), contacto.getApellido());
-        if (!repositorioContacto.existsById(id)) {
-            throw new RuntimeException();
-        }
         repositorioContacto.deleteById(id);
         DtoRespuesta respuesta = new DtoRespuesta("Contacto eliminado con éxito",
                 LocalDateTime.now().toString());
@@ -60,16 +55,30 @@ public class Servicio {
         if (contacto.isPresent()) {
             return contacto.get().getId();
         } else {
-
-            throw new EntityNotFoundException();
+            throw new ExcepcionContactos("Datos de entrada incorrectos",
+                    "No existe un contacto para el nombre y apellido ingresado.",
+                    LocalDateTime.now().toString());
         }
+
     }
 
     public Optional<Contactos> buscarContactoPorNombreOCorreo(String nombre, String correo) {
         Optional<Contactos> contacto= repositorioContacto.findByNombreContainingAndCorreoContaining(nombre, correo);
         if (contacto.isEmpty()) {
-            throw new EntityNotFoundException();
+            throw new ExcepcionContactos("Datos de entrada incorrectos",
+                    "No existe un contacto para el nombre o correo ingresado",
+                    LocalDateTime.now().toString());
         }
         return contacto;
     }
+
+    public void vaidarSiExiste(String nombre, String apellido){
+        Optional<Contactos> contacto = repositorioContacto.findByNombreAndApellido(nombre, apellido);
+        if (!contacto.isEmpty()) {
+            throw new ExcepcionContactos("Datos de entrada incorrectos",
+                    "El contacto ingresado ya existe",
+                    LocalDateTime.now().toString());
+        }
+    }
+
 }
