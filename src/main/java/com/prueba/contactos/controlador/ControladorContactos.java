@@ -5,11 +5,6 @@ import com.prueba.contactos.modelos.Contactos;
 import com.prueba.contactos.modelos.DtoRespuesta;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,13 +31,13 @@ public class ControladorContactos {
     }
 
     @PutMapping()
-    public ResponseEntity<DtoRespuesta> actualizarContacto(@RequestBody Contactos contacto) {
+    public ResponseEntity<DtoRespuesta> actualizarContacto(@Valid @RequestBody Contactos contacto) {
         DtoRespuesta respuesta = servicioContactos.actualizarContacto(contacto);
         return ResponseEntity.ok(respuesta);
     }
 
     @DeleteMapping()
-    public ResponseEntity<Void> eliminarContacto(@RequestBody Contactos contacto) {
+    public ResponseEntity<Void> eliminarContacto(@Valid @RequestBody Contactos contacto) {
 
         DtoRespuesta respuesta = servicioContactos.eliminarContacto(contacto);
         return ResponseEntity.noContent()
