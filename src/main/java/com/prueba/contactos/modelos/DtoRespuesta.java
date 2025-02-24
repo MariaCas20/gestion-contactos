@@ -7,7 +7,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public class DtoRespuesta {
 
-    private String mensaje;
-    private String fecha;
+    private String mensaje; // Almacena el mensaje de respuesta (por ejemplo, un mensaje de éxito o error).
+    private String fecha; // Almacena la fecha y hora de la respuesta.
 
 }

@@ -18,23 +18,29 @@ public class ControladorContactos {
     @Autowired
     Servicio servicioContactos;
 
+    // Recurso para mostrar todos los contactos existentes
     @GetMapping("/listar")
     public ResponseEntity<List<Contactos>> listarContactos() {
         List<Contactos> contactos = servicioContactos.listarContactos();
         return ResponseEntity.ok(contactos);
     }
 
-        @PostMapping
+    // Crea un nuevo contacto y devuelve una respuesta con estado 201 (Created).
+
+    @PostMapping
     public ResponseEntity<DtoRespuesta> crearContacto(@Valid @RequestBody Contactos contacto) {
         DtoRespuesta respuesta = servicioContactos.crearContacto(contacto);
         return ResponseEntity.status(201).body(respuesta);
     }
+
+//Actualiza un contacto existente y devuelve la respuesta con estado 200 (OK).
 
     @PutMapping()
     public ResponseEntity<DtoRespuesta> actualizarContacto(@Valid @RequestBody Contactos contacto) {
         DtoRespuesta respuesta = servicioContactos.actualizarContacto(contacto);
         return ResponseEntity.ok(respuesta);
     }
+    //Elimina un contacto y devuelve una respuesta sin contenido (204 No Content), incluyendo encabezados personalizados con detalles de la eliminación.
 
     @DeleteMapping()
     public ResponseEntity<Void> eliminarContacto(@Valid @RequestBody Contactos contacto) {
@@ -46,6 +52,7 @@ public class ControladorContactos {
                 .build();
     }
 
+    //Busca un contacto por mobre, correo
     @GetMapping("/buscar")
     public ResponseEntity<Contactos> buscarContacto(
             @RequestParam(value = "nombre", required = false, defaultValue = "") String nombre,

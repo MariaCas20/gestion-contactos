@@ -11,15 +11,15 @@ import lombok.Setter;
 @AllArgsConstructor
 public class Direccion {
 
-    private String pais;
+    private String pais;  // Almacena el nombre del país de la dirección.
 
-    private String ciudad;
+    private String ciudad; // Almacena el nombre de la ciudad de la dirección.
 
-    private String estado;
+    private String estado; // Almacena el nombre del estado o provincia de la dirección.
 
-    private String calle;
+    private String calle; // Almacena el nombre de la calle de la dirección.
 
-    private String codigoPostal;
+    private String codigoPostal; // Almacena el código postal de la dirección.
 
-    private String numero;
+    private String numero; // Almacena el número de la casa o apartamento en la dirección.
 }
